@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Mappa Punti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 🔹 INSERISCI QUI I TUOI PUNTI
+        const points = [
+            // presi da 2markers / maptons / mapcarta ecc.
+
+            // Parco Giacomo Ferrari (detto Parco Ferrari)
+            { name: "Parco Ferrari", lat: 44.7920261, lng: 10.3399139 },
+
+            // centro città di Parma
+            { name: "Parma Centro", lat: 44.801485, lng: 10.3279036 },
+
+            // Parco Falcone e Borsellino
+            { name: "Parco Falcone e Borsellino", lat: 44.80077, lng: 10.34573 },
+
+            // Parco Giochi Parma Mia (Via Indro Montanelli)
+            { name: "Parco Giochi Parma Mia", lat: 44.7820158, lng: 10.3005395 },
+
+            // Parco Bizzozzero
+            { name: "Parco Bizzozzero", lat: 44.78774, lng: 10.33148 },
+
+            // Parco Renzo Martini
+            { name: "Parco Renzo Martini", lat: 44.79682, lng: 10.35132 },
+
+            // Parco del Naviglio (Parco Nord)
+            { name: "Parco Del Naviglio", lat: 44.81488, lng: 10.34002 },
+
+            // Parco Paradigna Nord
+            { name: "Parco Paradigna Nord", lat: 44.82785, lng: 10.34053 },
+
+            // --- QUI NON HO COORDINATE AFFIDABILI, LASCIO TODO ---
+
+            { name: "Parco Gino Cervi", lat: 44.79444351472336, lng: 10.295536248762877 },            // TODO: da compilare
+            { name: "Parco Valenti Don Enzo", lat: 44.799295104530934, lng: 10.303149640760141 },      // TODO
+            { name: "Parco delle Magnolie", lat: 44.80926678415164, lng: 10.30788882047171 },        // TODO
+            { name: "Parco Ferdinando Laghi", lat: 44.782671104703674, lng: 10.334796010072415 },      // TODO
+            { name: "Parco Area Verde di Via Pascal", lat: 44.78675260043401, lng: 10.363195452669135 }, // TODO
+            { name: "Parco Luciano Berio", lat: 44.78231362313351, lng: 10.35882495425161 },         // TODO
+        ];
+
+
+        // Inizializza mappa
+        let map;
+        if (points.length > 0) {
+            map = L.map("map").setView([points[0].lat, points[0].lng], 13);
+        } else {
+            map = L.map("map").setView([41.9, 12.5], 6); // fallback Italia
+        }
+
+        // Tile OpenStreetMap
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+        }).addTo(map);
+
+        // Mostra marker
+        const markers = [];
+
+        points.forEach(p => {
+            const m = L.marker([p.lat, p.lng]).addTo(map);
+            m.bindPopup(`<strong>${p.name}</strong>`);
+            markers.push(m);
+        });
+
+        // Se ci sono più punti, adatta la vista
+        if (markers.length > 1) {
+            const group = L.featureGroup(markers);
+            map.fitBounds(group.getBounds().pad(0.2));
+        }
+    </script>
+
+</body>
+
+</html>
